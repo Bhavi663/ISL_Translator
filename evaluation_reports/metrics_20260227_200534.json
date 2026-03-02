@@ -1,0 +1,321 @@
+{
+  "model_name": "trained_20260225_215841",
+  "timestamp": "20260227_200534",
+  "num_classes": 43,
+  "accuracy": 3.1,
+  "top3_accuracy": 7.8,
+  "top5_accuracy": 12.8,
+  "macro": {
+    "precision": 0.144176270271151,
+    "recall": 2.716983593724518,
+    "f1": 0.2736352946937089
+  },
+  "weighted": {
+    "precision": 0.1674447002302072,
+    "recall": 3.1,
+    "f1": 0.317511753338525
+  },
+  "per_class": [
+    {
+      "class": "0",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 19
+    },
+    {
+      "class": "1",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 18
+    },
+    {
+      "class": "2",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 20
+    },
+    {
+      "class": "3",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25
+    },
+    {
+      "class": "4",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "5",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 12
+    },
+    {
+      "class": "6",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 20
+    },
+    {
+      "class": "7",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27
+    },
+    {
+      "class": "8",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 13
+    },
+    {
+      "class": "9",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27
+    },
+    {
+      "class": "A",
+      "precision": 3.1067961165048543,
+      "recall": 51.61290322580645,
+      "f1": 5.860805860805861,
+      "support": 31
+    },
+    {
+      "class": "B",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 15
+    },
+    {
+      "class": "C",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "D",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27
+    },
+    {
+      "class": "E",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 29
+    },
+    {
+      "class": "F",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 34
+    },
+    {
+      "class": "G",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "H",
+      "precision": 3.0927835051546393,
+      "recall": 65.21739130434783,
+      "f1": 5.905511811023622,
+      "support": 23
+    },
+    {
+      "class": "Hello",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 21
+    },
+    {
+      "class": "I",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27
+    },
+    {
+      "class": "India",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25
+    },
+    {
+      "class": "J",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 19
+    },
+    {
+      "class": "K",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 22
+    },
+    {
+      "class": "L",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25
+    },
+    {
+      "class": "M",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 22
+    },
+    {
+      "class": "N",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 29
+    },
+    {
+      "class": "Namaste",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 23
+    },
+    {
+      "class": "No",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 28
+    },
+    {
+      "class": "O",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25
+    },
+    {
+      "class": "P",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "Please",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 23
+    },
+    {
+      "class": "Q",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 22
+    },
+    {
+      "class": "R",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 22
+    },
+    {
+      "class": "S",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 27
+    },
+    {
+      "class": "T",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 20
+    },
+    {
+      "class": "Thank_You",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 21
+    },
+    {
+      "class": "U",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 25
+    },
+    {
+      "class": "V",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 17
+    },
+    {
+      "class": "W",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "X",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 30
+    },
+    {
+      "class": "Y",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 20
+    },
+    {
+      "class": "Yes",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 24
+    },
+    {
+      "class": "Z",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 23
+    }
+  ]
+}

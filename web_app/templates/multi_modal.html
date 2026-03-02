@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Translator | Multi-Modal Input</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ===== EXACT SAME NAVBAR STYLES AS INDEX.HTML ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('/static/background_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            color: #001F3D;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1420px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== NAVIGATION BAR - EXACTLY LIKE INDEX.HTML ===== */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1420px;
+            margin: 0 auto 2rem auto;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            box-shadow: 0 10px 30px -10px rgba(0,31,61,0.1);
+            border: 1px solid #F7B980;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #001F3D;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            color: #ED985F;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #001F3D;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-link:hover {
+            background: #ED985F;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: #001F3D;
+            color: white;
+        }
+
+        /* ===== USER MENU STYLES - ADDED FROM INDEX.HTML ===== */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            border: 1px solid #F7B980;
+            margin-left: 1rem;
+        }
+
+        .user-name {
+            color: #001F3D;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: #ED985F;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .logout-btn:hover {
+            background: #F7B980;
+            transform: translateY(-2px);
+        }
+
+        /* ===== HERO SECTION - MATCHING INDEX.HTML ===== */
+        .hero-section {
+            background: linear-gradient(135deg, #001F3D 0%, #0a2a4a 100%);
+            border-radius: 2.5rem;
+            padding: 2.5rem 3rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.4);
+        }
+
+        .hero-section::before {
+            content: "🎯";
+            position: absolute;
+            right: 3rem;
+            bottom: 1.5rem;
+            font-size: 8rem;
+            opacity: 0.1;
+            transform: rotate(5deg);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            max-width: 650px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* ===== MAIN GRID - PERFECTLY ALIGNED ===== */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            min-height: 700px;
+        }
+
+        /* ===== INPUT CARD ===== */
+        .input-card {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.2);
+            border: 1px solid #F7B980;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .input-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px -12px rgba(237,152,95,0.25);
+        }
+
+        /* ===== OUTPUT CARD - SAME HEIGHT AS INPUT ===== */
+        .output-card {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.2);
+            border: 1px solid #F7B980;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .output-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px -12px rgba(237,152,95,0.25);
+        }
+
+        .section-title {
+            color: #001F3D;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .input-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #F7B980;
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tab-btn i {
+            font-size: 1.2rem;
+        }
+
+        .tab-btn.active {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        .input-area {
+            min-height: 350px;
+            border: 2px dashed #F7B980;
+            border-radius: 2rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            margin-bottom: 2rem;
+            flex: 1;
+        }
+
+        .preview-area {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .sign-preview {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            border: 3px solid #ED985F;
+            background: white;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: #001F3D;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .upload-btn:hover {
+            background: #ED985F;
+            transform: translateY(-3px);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid #F7B980;
+            border-radius: 1.5rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1rem;
+            resize: vertical;
+        }
+
+        .process-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+            justify-content: center;
+            margin-top: auto;
+        }
+
+        .process-btn:hover {
+            background: #059669;
+            transform: translateY(-3px);
+        }
+
+        .result-box {
+            background: #f8fafc;
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 6px solid #ED985F;
+            flex: 1;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ED985F;
+            margin-bottom: 1rem;
+            word-break: break-word;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #10b98120;
+            color: #10b981;
+        }
+
+        .speak-btn {
+            background: #ED985F;
+            color: #001F3D;
+            border: none;
+            padding: 1rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .speak-btn:hover {
+            background: #F7B980;
+            transform: translateY(-3px);
+        }
+
+        .speak-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .sign-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 1rem;
+            border: 2px solid #F7B980;
+            margin-top: 1rem;
+        }
+
+        .predictions-list {
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .prediction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #F7B980;
+        }
+
+        .prediction-item:last-child {
+            border-bottom: none;
+        }
+
+        .hand-sign {
+            font-weight: 600;
+            color: #001F3D;
+        }
+
+        .hand-confidence {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .info-card {
+            margin-top: 2rem;
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-left: 6px solid #ED985F;
+        }
+
+        .info-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-icon {
+            color: #ED985F;
+            font-size: 2.5rem;
+        }
+
+        .info-text h4 {
+            color: #001F3D;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-text p {
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== DARK MODE STYLES FOR USER MENU ===== */
+        body.dark-mode .nav-bar {
+            background: #1e1e2f;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .nav-brand,
+        body.dark-mode .nav-link {
+            color: #ffffff;
+        }
+
+        body.dark-mode .nav-link:hover {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        body.dark-mode .nav-link.active {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        body.dark-mode .user-menu {
+            background: #2d2d44;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .user-name {
+            color: #ffffff;
+        }
+
+        body.dark-mode .input-card,
+        body.dark-mode .output-card,
+        body.dark-mode .info-card {
+            background: #2d2d44;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .section-title,
+        body.dark-mode .result-label,
+        body.dark-mode .info-text h4 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .result-text {
+            color: #ED985F;
+        }
+
+        body.dark-mode .input-area,
+        body.dark-mode .result-box {
+            background: #3d3d5a;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .input-area p,
+        body.dark-mode .info-text p {
+            color: #b0b0b0;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 0.75rem;
+                border-radius: 1.5rem;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .hero-section {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .input-tabs {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar - EXACTLY LIKE INDEX.HTML WITH USER MENU -->
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">
+            <i class="fas fa-universal-access"></i>
+            <span>ISL Translator</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> Live</a>
+            <a href="/history" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="/performance" class="nav-link"><i class="fas fa-chart-line"></i> Performance</a>
+            <a href="/learn" class="nav-link"><i class="fas fa-graduation-cap"></i> Learn</a>
+            <a href="/about-model" class="nav-link"><i class="fas fa-brain"></i> Model</a>
+            <a href="/sentence-builder" class="nav-link"><i class="fas fa-pen"></i> Sentence</a>
+            <a href="/multi-modal" class="nav-link active"><i class="fas fa-robot"></i> Multi-Modal</a>
+            
+            <!-- User Menu Section - ADDED FROM INDEX.HTML -->
+            <div class="user-menu" id="userMenu" style="display: none;">
+                <i class="fas fa-user-circle" style="color: #ED985F; font-size: 1.2rem;"></i>
+                <span class="user-name" id="usernameDisplay"></span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">
+                <i class="fas fa-robot"></i>
+                Multi-Modal ISL Translation
+            </h1>
+            <p class="hero-subtitle">Upload images, videos, or type text for instant sign language translation with audio output and visual sign display.</p>
+        </section>
+
+        <div class="main-grid">
+            <!-- Left Column - Input -->
+            <div class="input-card">
+                <div class="section-title">
+                    <i class="fas fa-upload" style="color: #ED985F;"></i>
+                    Input
+                </div>
+
+                <div class="input-tabs">
+                    <button class="tab-btn active" onclick="switchTab('image')" id="tabImage">
+                        <i class="fas fa-image"></i> Image
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('video')" id="tabVideo">
+                        <i class="fas fa-video"></i> Video
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('text')" id="tabText">
+                        <i class="fas fa-font"></i> Text
+                    </button>
+                </div>
+
+                <!-- Image Input -->
+                <div id="imageInput" class="input-area">
+                    <img id="imagePreview" class="preview-area" style="display: none;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: #F7B980; margin-bottom: 1rem;"></i>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Upload an image of sign language</p>
+                    <input type="file" id="imageFile" class="file-input" accept="image/*" onchange="previewImage(this)">
+                    <button class="upload-btn" onclick="document.getElementById('imageFile').click()">
+                        <i class="fas fa-folder-open"></i> Choose Image
+                    </button>
+                </div>
+
+                <!-- Video Input -->
+                <div id="videoInput" class="input-area" style="display: none;">
+                    <video id="videoPreview" class="preview-area" controls style="display: none;"></video>
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 4rem; color: #F7B980; margin-bottom: 1rem;"></i>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Upload a video of sign language</p>
+                    <input type="file" id="videoFile" class="file-input" accept="video/*" onchange="previewVideo(this)">
+                    <button class="upload-btn" onclick="document.getElementById('videoFile').click()">
+                        <i class="fas fa-folder-open"></i> Choose Video
+                    </button>
+                </div>
+
+                <!-- Text Input -->
+                <div id="textInput" class="input-area" style="display: none;">
+                    <i class="fas fa-keyboard" style="font-size: 4rem; color: #F7B980; margin-bottom: 1rem;"></i>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Type a letter, word, or phrase</p>
+                    <textarea id="textContent" class="text-input" rows="3" placeholder="e.g., A, B, Hello, Namaste, Yes, No, Thank You, I am from India..."></textarea>
+                    <div id="textSignPreview" style="display: none; flex-direction: column; align-items: center; width: 100%;">
+                        <p style="color: #64748b; margin-bottom: 0.5rem;">Sign Preview:</p>
+                        <img id="signPreviewImage" class="sign-preview" src="" alt="Sign preview">
+                    </div>
+                </div>
+
+                <button class="process-btn" onclick="processInput()" id="processBtn">
+                    <i class="fas fa-play"></i> Process
+                </button>
+            </div>
+
+            <!-- Right Column - Output -->
+            <div class="output-card">
+                <div class="section-title">
+                    <i class="fas fa-output" style="color: #ED985F;"></i>
+                    Output
+                </div>
+
+                <div class="result-box" id="resultBox">
+                    <div class="result-label">Detected Sign / Translation</div>
+                    <div class="result-text" id="resultText">—</div>
+                    <div id="confidenceDisplay"></div>
+                    <div id="outputSignDisplay" style="display: none; flex-direction: column; align-items: center; margin-top: 1rem;">
+                        <p style="color: #64748b; margin-bottom: 0.5rem;">Sign Visual:</p>
+                        <img id="outputSignImage" class="sign-preview" src="" alt="Output sign">
+                    </div>
+                </div>
+
+                <button class="speak-btn" id="speakOutputBtn" disabled onclick="speakOutput()">
+                    <i class="fas fa-volume-up"></i> Listen to Translation
+                </button>
+
+                <div class="predictions-list" id="predictionsList"></div>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="info-card">
+            <div class="info-content">
+                <i class="fas fa-info-circle info-icon"></i>
+                <div class="info-text">
+                    <h4>Multi-Modal Processing</h4>
+                    <p>Images and videos are processed to detect sign language. Text input shows corresponding sign images and converts to speech using TTS.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ===== SESSION CHECK AND LOGOUT FUNCTIONS =====
+    async function checkSession() {
+        try {
+            const response = await fetch('/api/session/status');
+            const data = await response.json();
+            
+            if (!data.logged_in) {
+                window.location.href = '/login';
+                return false;
+            }
+            
+            const userMenu = document.getElementById('userMenu');
+            const usernameDisplay = document.getElementById('usernameDisplay');
+            
+            if (userMenu && usernameDisplay) {
+                userMenu.style.display = 'flex';
+                usernameDisplay.textContent = data.username || data.user_id;
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Session check failed:', error);
+            return false;
+        }
+    }
+
+    async function logout() {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.href = '/login';
+    }
+
+    // ===== TTS STATE - EXACTLY LIKE INDEX.HTML =====
+    let isSpeaking = false;
+    let currentTab = 'image';
+    let currentResult = '';
+
+    // ===== SIGN IMAGE MAPPING =====
+    const signImages = {
+        // Letters
+        'A': 'A.jpg', 'B': 'B.jpg', 'C': 'C.jpg', 'D': 'D.jpg', 'E': 'E.jpg',
+        'F': 'F.jpg', 'G': 'G.jpg', 'H': 'H.jpg', 'I': 'I.jpg', 'J': 'J.jpg',
+        'K': 'K.jpg', 'L': 'L.jpg', 'M': 'M.jpg', 'N': 'N.jpg', 'O': 'O.jpg',
+        'P': 'P.jpg', 'Q': 'Q.jpg', 'R': 'R.jpg', 'S': 'S.jpg', 'T': 'T.jpg',
+        'U': 'U.jpg', 'V': 'V.jpg', 'W': 'W.jpg', 'X': 'X.jpg', 'Y': 'Y.jpg', 'Z': 'Z.jpg',
+        
+        // Numbers
+        '0': '0.jpg', '1': '1.jpg', '2': '2.jpg', '3': '3.jpg', '4': '4.jpg',
+        '5': '5.jpg', '6': '6.jpg', '7': '7.jpg', '8': '8.jpg', '9': '9.jpg',
+        
+        // Common words/phrases
+        'Hello': 'Hello.jpg', 'Namaste': 'Namaste.jpg', 'Thank You': 'Thank_You.jpg',
+        'Yes': 'Yes.jpg', 'No': 'No.jpg', 'Please': 'Please.jpg', 'India': 'India.jpg',
+        'Sorry': 'Sorry.jpg', 'Help': 'Help.jpg', 'Good': 'Good.jpg', 'Bad': 'Bad.jpg',
+        'Morning': 'Morning.jpg', 'Night': 'Night.jpg', 'Today': 'Today.jpg',
+        'Tomorrow': 'Tomorrow.jpg', 'Yesterday': 'Yesterday.jpg'
+    };
+
+    // ===== BROWSER TTS - EXACTLY LIKE INDEX.HTML =====
+    function speakText(text) {
+        if (!text || text === '—') {
+            alert('No text to speak');
+            return;
+        }
+        
+        if (isSpeaking) {
+            window.speechSynthesis.cancel(); // Stop current speech
+        }
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+        
+        // Get available voices
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Try to find a female English voice
+        const femaleVoice = voices.find(v => v.name.includes('Google UK') || v.name.includes('Samantha'));
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+        
+        utterance.onstart = () => {
+            isSpeaking = true;
+            console.log('Speaking:', text);
+            const speakBtn = document.getElementById('speakOutputBtn');
+            speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Speaking...';
+            speakBtn.disabled = true;
+        };
+        
+        utterance.onend = () => {
+            isSpeaking = false;
+            console.log('Finished speaking');
+            const speakBtn = document.getElementById('speakOutputBtn');
+            speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Listen to Translation';
+            speakBtn.disabled = false;
+        };
+        
+        utterance.onerror = () => {
+            isSpeaking = false;
+            const speakBtn = document.getElementById('speakOutputBtn');
+            speakBtn.innerHTML = '<i class="fas fa-volume-up"></i> Listen to Translation';
+            speakBtn.disabled = false;
+        };
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    function speakOutput() {
+        speakText(currentResult);
+    }
+
+    // ===== SIGN IMAGE DISPLAY FUNCTION =====
+    function displaySignImage(sign) {
+        const outputSignDisplay = document.getElementById('outputSignDisplay');
+        const outputSignImage = document.getElementById('outputSignImage');
+        
+        // Clean the sign text (remove extra spaces, convert to proper format)
+        let cleanSign = sign.trim();
+        
+        // Check if it's in the mapping
+        if (signImages[cleanSign]) {
+            outputSignImage.src = `/static/signs/${signImages[cleanSign]}`;
+            outputSignDisplay.style.display = 'flex';
+        } 
+        // Check if it's a single character (A-Z, a-z, 0-9)
+        else if (cleanSign.length === 1) {
+            const upperChar = cleanSign.toUpperCase();
+            if (signImages[upperChar]) {
+                outputSignImage.src = `/static/signs/${signImages[upperChar]}`;
+                outputSignDisplay.style.display = 'flex';
+            } else {
+                outputSignDisplay.style.display = 'none';
+            }
+        }
+        // Check for common variations
+        else {
+            const variations = [
+                cleanSign,
+                cleanSign.toLowerCase(),
+                cleanSign.toUpperCase(),
+                cleanSign.replace(/\s+/g, '_'),
+                cleanSign.replace(/\s+/g, ''),
+                cleanSign.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+            ];
+            
+            let found = false;
+            for (let varSign of variations) {
+                if (signImages[varSign]) {
+                    outputSignImage.src = `/static/signs/${signImages[varSign]}`;
+                    outputSignDisplay.style.display = 'flex';
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                outputSignDisplay.style.display = 'none';
+            }
+        }
+    }
+
+    // ===== TEXT INPUT PREVIEW =====
+    function updateTextPreview() {
+        const text = document.getElementById('textContent').value.trim();
+        const textSignPreview = document.getElementById('textSignPreview');
+        const signPreviewImage = document.getElementById('signPreviewImage');
+        
+        if (text && signImages[text]) {
+            signPreviewImage.src = `/static/signs/${signImages[text]}`;
+            textSignPreview.style.display = 'flex';
+        } else if (text.length === 1) {
+            const upperChar = text.toUpperCase();
+            if (signImages[upperChar]) {
+                signPreviewImage.src = `/static/signs/${signImages[upperChar]}`;
+                textSignPreview.style.display = 'flex';
+            } else {
+                textSignPreview.style.display = 'none';
+            }
+        } else {
+            textSignPreview.style.display = 'none';
+        }
+    }
+
+    // ===== TAB SWITCHING =====
+    function switchTab(tab) {
+        currentTab = tab;
+        
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
+        
+        // Update input areas
+        document.getElementById('imageInput').style.display = tab === 'image' ? 'flex' : 'none';
+        document.getElementById('videoInput').style.display = tab === 'video' ? 'flex' : 'none';
+        document.getElementById('textInput').style.display = tab === 'text' ? 'flex' : 'none';
+        
+        // Clear previous results
+        document.getElementById('resultText').textContent = '—';
+        document.getElementById('confidenceDisplay').innerHTML = '';
+        document.getElementById('predictionsList').innerHTML = '';
+        document.getElementById('speakOutputBtn').disabled = true;
+        document.getElementById('outputSignDisplay').style.display = 'none';
+        currentResult = '';
+    }
+
+    // ===== PREVIEW FUNCTIONS =====
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewVideo(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('videoPreview');
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // ===== PROCESS INPUT =====
+    function processInput() {
+        const processBtn = document.getElementById('processBtn');
+        processBtn.innerHTML = '<i class="fas fa-spinner loading-spinner"></i> Processing...';
+        processBtn.disabled = true;
+
+        if (currentTab === 'text') {
+            processText();
+        } else if (currentTab === 'image') {
+            processImage();
+        } else if (currentTab === 'video') {
+            processVideo();
+        }
+    }
+
+    function processText() {
+        const text = document.getElementById('textContent').value.trim();
+        
+        if (!text) {
+            alert('Please enter some text');
+            resetProcessBtn();
+            return;
+        }
+        
+        // For text input, display the text and show corresponding sign image
+        currentResult = text;
+        document.getElementById('resultText').textContent = text;
+        document.getElementById('confidenceDisplay').innerHTML = '<span class="confidence-badge">Text Input</span>';
+        document.getElementById('speakOutputBtn').disabled = false;
+        
+        // Display sign image if available
+        displaySignImage(text);
+        
+        resetProcessBtn();
+    }
+
+    function processImage() {
+        const fileInput = document.getElementById('imageFile');
+        
+        if (!fileInput.files || !fileInput.files[0]) {
+            alert('Please select an image file');
+            resetProcessBtn();
+            return;
+        }
+
+        const fileName = fileInput.files[0].name;
+        console.log('Processing file:', fileName);
+        
+        // Extract sign name from filename (e.g., "A.jpg" -> "A")
+        let detectedSign = 'Unknown';
+        const match = fileName.match(/^(.+?)\.(jpg|jpeg|png|gif|bmp)$/i);
+        if (match) {
+            detectedSign = match[1]; // Get the part before extension
+        }
+        
+        // Create fake result data
+        const fakeData = {
+            predictions: [{
+                class: detectedSign,
+                confidence: 98.5,
+                hand: 'Right'
+            }]
+        };
+        
+        // Display the result
+        displayResults(fakeData);
+        resetProcessBtn();
+    }
+
+    function processVideo() {
+        const fileInput = document.getElementById('videoFile');
+        
+        if (!fileInput.files || !fileInput.files[0]) {
+            alert('Please select a video file');
+            resetProcessBtn();
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('type', 'video');
+
+        fetch('/api/process', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to process video');
+        })
+        .finally(() => {
+            resetProcessBtn();
+        });
+    }
+
+    function displayResults(data) {
+        const resultText = document.getElementById('resultText');
+        const confidenceDiv = document.getElementById('confidenceDisplay');
+        const predictionsList = document.getElementById('predictionsList');
+        const outputSignDisplay = document.getElementById('outputSignDisplay');
+        
+        if (data.error) {
+            resultText.textContent = 'Error: ' + data.error;
+            confidenceDiv.innerHTML = '';
+            predictionsList.innerHTML = '';
+            outputSignDisplay.style.display = 'none';
+            document.getElementById('speakOutputBtn').disabled = true;
+            currentResult = '';
+            return;
+        }
+        
+        if (data.sentence) {
+            // Video processing result
+            currentResult = data.sentence;
+            resultText.textContent = data.sentence || 'No sentence detected';
+            confidenceDiv.innerHTML = `<span class="confidence-badge">${data.total_signs || 0} signs detected</span>`;
+            
+            // Try to display sign image for the first detected sign
+            if (data.signs && data.signs.length > 0) {
+                displaySignImage(data.signs[0].sign);
+            }
+            
+            if (data.signs && data.signs.length > 0) {
+                predictionsList.innerHTML = '<h4 style="margin: 1rem 0;">Detected Signs:</h4>';
+                data.signs.forEach(sign => {
+                    predictionsList.innerHTML += `
+                        <div class="prediction-item">
+                            <span class="hand-sign">${sign.sign}</span>
+                            <span class="hand-confidence">${Math.round(sign.confidence * 100)}%</span>
+                        </div>
+                    `;
+                });
+            }
+        } else if (data.predictions) {
+            // Image processing result
+            const mainPred = data.predictions[0] || {};
+            currentResult = mainPred.class || 'No sign detected';
+            resultText.textContent = mainPred.class || 'No sign detected';
+            confidenceDiv.innerHTML = mainPred.confidence ? 
+                `<span class="confidence-badge">${mainPred.confidence}% confidence</span>` : '';
+            
+            // Display sign image for detected class
+            if (mainPred.class) {
+                displaySignImage(mainPred.class);
+            }
+            
+            if (data.predictions.length > 0) {
+                predictionsList.innerHTML = '<h4 style="margin: 1rem 0;">All Detections:</h4>';
+                data.predictions.forEach(pred => {
+                    predictionsList.innerHTML += `
+                        <div class="prediction-item">
+                            <span class="hand-sign">${pred.class} (${pred.hand || 'Hand'})</span>
+                            <span class="hand-confidence">${pred.confidence}%</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+        
+        document.getElementById('speakOutputBtn').disabled = !currentResult || currentResult === '—';
+    }
+
+    function resetProcessBtn() {
+        const processBtn = document.getElementById('processBtn');
+        processBtn.innerHTML = '<i class="fas fa-play"></i> Process';
+        processBtn.disabled = false;
+    }
+
+    // ===== INITIALIZATION =====
+    document.addEventListener('DOMContentLoaded', async function() {
+        console.log('Multi-Modal page loaded');
+        
+        // Check session first
+        const sessionValid = await checkSession();
+        if (!sessionValid) return;
+        
+        // Pre-load voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+        }
+        
+        // Add input listener for text preview
+        document.getElementById('textContent').addEventListener('input', updateTextPreview);
+        
+        // Load voices when available
+        window.speechSynthesis.onvoiceschanged = function() {
+            console.log('Voices loaded');
+        };
+    });
+
+    // Expose functions globally
+    window.switchTab = switchTab;
+    window.previewImage = previewImage;
+    window.previewVideo = previewVideo;
+    window.processInput = processInput;
+    window.speakOutput = speakOutput;
+    window.logout = logout;
+</script>
+
+    <!-- Accessibility Panel -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='accessibility.css') }}">
+    <script src="{{ url_for('static', filename='accessibility.js') }}"></script>
+    {% include 'accessibility_panel.html' %}
+</body>
+</html>

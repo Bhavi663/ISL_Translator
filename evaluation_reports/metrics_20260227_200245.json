@@ -1,0 +1,24 @@
+{
+  "model_name": "trained_20260225_215841",
+  "timestamp": "20260227_200245",
+  "num_classes": 43,
+  "accuracy": 3.0,
+  "top3_accuracy": 7.6,
+  "top5_accuracy": 11.1,
+  "macro": {
+    "precision": 0.13965153908331399,
+    "recall": 2.4057738572574174,
+    "f1": 0.2639789853978833
+  },
+  "weighted": {
+    "precision": 0.17414546923689253,
+    "recall": 3.0,
+    "f1": 0.32918179479116044
+  },
+  "per_class": [
+    {
+      "class": "0",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 

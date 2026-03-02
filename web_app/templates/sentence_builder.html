@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Translator | Sentence Builder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ===== SENTENCE BUILDER - MATCHING HISTORY.HTML THEME ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('/static/background_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            color: #001F3D;
+            padding: 2rem 1rem;
+        }
+
+        .sentence-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== NAVIGATION BAR - EXACTLY MATCHING HISTORY.HTML WITH USER MENU ===== */
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto 2rem auto;
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            box-shadow: 0 10px 30px -10px rgba(0,31,61,0.1);
+            border: 1px solid #F7B980;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #001F3D;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav-brand i {
+            color: #ED985F;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #001F3D;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-link:hover {
+            background: #ED985F;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: #001F3D;
+            color: white;
+        }
+
+        /* ===== USER MENU STYLES - ADDED FROM INDEX.HTML ===== */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            border: 1px solid #F7B980;
+            margin-left: 1rem;
+        }
+
+        .user-name {
+            color: #001F3D;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: #ED985F;
+            color: white;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .logout-btn:hover {
+            background: #F7B980;
+            transform: translateY(-2px);
+        }
+
+        /* ===== HERO SECTION - MATCHING HISTORY.HTML ===== */
+        .hero-section {
+            background: linear-gradient(135deg, #001F3D 0%, #0a2a4a 100%);
+            border-radius: 2.5rem;
+            padding: 2.5rem 3rem;
+            margin-bottom: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.4);
+        }
+
+        .hero-section::before {
+            content: "📝";
+            position: absolute;
+            right: 3rem;
+            bottom: 1.5rem;
+            font-size: 8rem;
+            opacity: 0.1;
+            transform: rotate(-5deg);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            max-width: 650px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* ===== MAIN LAYOUT - ADJUSTED ===== */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* ===== LEFT COLUMN - LIVE FEED ===== */
+        .live-feed-card {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.2);
+            border: 1px solid #F7B980;
+            transition: all 0.3s ease;
+        }
+
+        .live-feed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px -12px rgba(237,152,95,0.25);
+        }
+
+        /* ===== INCREASED WEBCAM SIZE ===== */
+        .video-wrapper {
+            background: #001F3D;
+            border-radius: 2rem;
+            overflow: hidden;
+            width: 100%;
+            height: 650px;
+            border: 3px solid #ED985F;
+            margin-bottom: 2rem;
+            position: relative;
+            box-shadow: 0 20px 30px -8px rgba(0,31,61,0.3);
+        }
+
+        .video-feed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .camera-status {
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 15px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #ef4444;
+            box-shadow: 0 0 15px #ef4444;
+        }
+
+        /* ===== CAMERA CONTROLS - ADDED ===== */
+        .camera-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cam-btn {
+            border: none;
+            border-radius: 1.5rem;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 8px 15px -5px rgba(0,0,0,0.1);
+        }
+
+        .cam-btn-primary {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        .cam-btn-primary:hover:not(:disabled) {
+            background: #F7B980;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -8px rgba(237,152,95,0.4);
+        }
+
+        .cam-btn-secondary {
+            background: #001F3D;
+            color: white;
+        }
+
+        .cam-btn-secondary:hover:not(:disabled) {
+            background: #0a2a4a;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -8px rgba(0,31,61,0.4);
+        }
+
+        .cam-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== CURRENT PREDICTION - ADJUSTED ===== */
+        .prediction-card {
+            background: #f8fafc;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #F7B980;
+            margin-bottom: 2rem;
+        }
+
+        .prediction-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .prediction-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .prediction-sign {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ED985F;
+            line-height: 1.2;
+        }
+
+        .prediction-confidence {
+            background: #001F3D;
+            color: white;
+            padding: 0.5rem 1.8rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ===== ACTION BUTTONS - ADJUSTED ===== */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            box-shadow: 0 8px 15px -5px rgba(0,0,0,0.1);
+        }
+
+        .action-btn.add {
+            background: #10b981;
+            color: white;
+        }
+
+        .action-btn.add:hover:not(:disabled) {
+            background: #059669;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -8px rgba(16,185,129,0.4);
+        }
+
+        .action-btn.speak {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        .action-btn.speak:hover:not(:disabled) {
+            background: #F7B980;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -8px rgba(237,152,95,0.4);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== SUGGESTIONS PANEL - ADJUSTED ===== */
+        .suggestions-panel {
+            background: #f8fafc;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #F7B980;
+        }
+
+        .panel-title {
+            color: #64748b;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .suggestions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .suggestion-chip {
+            background: white;
+            border: 1px solid #F7B980;
+            padding: 0.7rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px -3px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-chip:hover {
+            background: #ED985F;
+            color: white;
+            border-color: #ED985F;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -5px rgba(237,152,95,0.4);
+        }
+
+        /* ===== RIGHT COLUMN - BUILDER ===== */
+        .builder-card {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.2);
+            border: 1px solid #F7B980;
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+            transition: all 0.3s ease;
+        }
+
+        .builder-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px -12px rgba(237,152,95,0.25);
+        }
+
+        .builder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .builder-title {
+            color: #001F3D;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .builder-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #f8fafc;
+            color: #001F3D;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px -3px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover {
+            background: #ED985F;
+            color: white;
+            transform: scale(1.15);
+            box-shadow: 0 10px 15px -5px rgba(237,152,95,0.4);
+        }
+
+        /* ===== SENTENCE DISPLAY - ADJUSTED ===== */
+        .sentence-display {
+            background: #f8fafc;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            min-height: 140px;
+            margin-bottom: 2rem;
+            border: 2px dashed #F7B980;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #001F3D;
+            word-break: break-word;
+            box-shadow: inset 0 2px 10px -5px rgba(0,0,0,0.1);
+        }
+
+        /* ===== WORD CHIPS - ADJUSTED ===== */
+        .word-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            min-height: 70px;
+        }
+
+        .word-chip {
+            background: linear-gradient(135deg, #ED985F, #F7B980);
+            color: #001F3D;
+            padding: 0.7rem 1.5rem;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 5px 15px -5px rgba(237,152,95,0.4);
+            animation: slideIn 0.3s ease;
+        }
+
+        .word-chip .remove {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            background: rgba(0,31,61,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .word-chip .remove:hover {
+            background: #001F3D;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* ===== HISTORY SECTION - ADJUSTED ===== */
+        .history-section {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            border: 1px solid #F7B980;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.15);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .history-title {
+            color: #001F3D;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .history-item {
+            background: #f8fafc;
+            padding: 1.2rem;
+            border-radius: 1.5rem;
+            border-left: 6px solid #ED985F;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px -5px rgba(0,0,0,0.1);
+        }
+
+        .history-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 15px 25px -8px rgba(237,152,95,0.3);
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-text {
+            color: #001F3D;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .history-time {
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .history-btn {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .history-btn:hover {
+            background: #ED985F;
+            color: white;
+            transform: scale(1.15);
+        }
+
+        /* ===== PHRASE LIBRARY - ADJUSTED ===== */
+        .phrase-library {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            border: 1px solid #F7B980;
+            box-shadow: 0 25px 45px -12px rgba(0,31,61,0.15);
+        }
+
+        .library-title {
+            color: #001F3D;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .phrase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .phrase-card {
+            background: #f8fafc;
+            border: 1px solid #F7B980;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 8px -3px rgba(0,0,0,0.1);
+        }
+
+        .phrase-card:hover {
+            background: #ED985F;
+            color: white;
+            border-color: #ED985F;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -8px rgba(237,152,95,0.4);
+        }
+
+        .phrase-card i, .phrase-card span {
+            font-size: 1.1rem;
+        }
+
+        /* ===== INFO CARD - MATCHING HISTORY.HTML ===== */
+        .info-card {
+            margin-top: 2rem;
+            background: #f8fafc;
+            border-radius: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-left: 6px solid #ED985F;
+        }
+
+        .info-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-icon {
+            color: #ED985F;
+            font-size: 2.5rem;
+        }
+
+        .info-text h4 {
+            color: #001F3D;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .info-text p {
+            color: #64748b;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* ===== EMPTY STATES ===== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+            background: #f8fafc;
+            border-radius: 2rem;
+        }
+
+        .empty-icon {
+            font-size: 3.5rem;
+            color: #F7B980;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN - MATCHING HISTORY.HTML ===== */
+        @media (max-width: 1400px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr 350px;
+            }
+            
+            .video-wrapper {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .builder-card {
+                position: static;
+            }
+            
+            .video-wrapper {
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-bar {
+                flex-direction: column;
+                gap: 0.75rem;
+                border-radius: 1.5rem;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .hero-section {
+                padding: 2rem;
+                border-radius: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .phrase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .video-wrapper {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .phrase-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .builder-controls {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .prediction-card {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .prediction-sign {
+                font-size: 2rem;
+            }
+            
+            .video-wrapper {
+                height: 300px;
+            }
+        }
+
+        /* ===== DARK MODE STYLES WITH USER MENU ===== */
+        body.dark-mode {
+            background-image: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        body.dark-mode .nav-bar {
+            background: #1e1e2f;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .nav-brand,
+        body.dark-mode .nav-link {
+            color: #ffffff;
+        }
+
+        body.dark-mode .nav-link:hover {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        body.dark-mode .nav-link.active {
+            background: #ED985F;
+            color: #001F3D;
+        }
+
+        body.dark-mode .user-menu {
+            background: #2d2d44;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .user-name {
+            color: #ffffff;
+        }
+
+        body.dark-mode .live-feed-card,
+        body.dark-mode .builder-card,
+        body.dark-mode .history-section,
+        body.dark-mode .phrase-library,
+        body.dark-mode .info-card {
+            background: #2d2d44;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .builder-title,
+        body.dark-mode .history-title,
+        body.dark-mode .library-title,
+        body.dark-mode .info-text h4 {
+            color: #ffffff;
+        }
+
+        body.dark-mode .prediction-card,
+        body.dark-mode .suggestions-panel,
+        body.dark-mode .sentence-display,
+        body.dark-mode .history-item,
+        body.dark-mode .phrase-card,
+        body.dark-mode .suggestion-chip {
+            background: #3d3d5a;
+            border-color: #ED985F;
+        }
+
+        body.dark-mode .prediction-label,
+        body.dark-mode .panel-title,
+        body.dark-mode .history-time,
+        body.dark-mode .info-text p {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .prediction-sign {
+            color: #ED985F;
+        }
+
+        body.dark-mode .prediction-confidence {
+            background: #1e1e2f;
+            color: white;
+        }
+
+        body.dark-mode .sentence-display {
+            color: #ffffff;
+        }
+
+        body.dark-mode .word-chip {
+            background: linear-gradient(135deg, #ED985F, #F7B980);
+            color: #001F3D;
+        }
+
+        body.dark-mode .control-btn {
+            background: #3d3d5a;
+            color: #ffffff;
+        }
+
+        body.dark-mode .control-btn:hover {
+            background: #ED985F;
+            color: #001F3D;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;">Skip to main content</a>
+
+    <!-- Navigation Bar - EXACTLY MATCHING INDEX.HTML WITH USER MENU -->
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">
+            <i class="fas fa-universal-access"></i>
+            <span>ISL Translator</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="nav-link"><i class="fas fa-home"></i> Live</a>
+            <a href="/history" class="nav-link"><i class="fas fa-history"></i> History</a>
+            <a href="/performance" class="nav-link"><i class="fas fa-chart-line"></i> Performance</a>
+            <a href="/learn" class="nav-link"><i class="fas fa-graduation-cap"></i> Learn</a>
+            <a href="/about-model" class="nav-link"><i class="fas fa-brain"></i> Model</a>
+            <a href="/sentence-builder" class="nav-link active"><i class="fas fa-pen"></i> Sentence</a>
+            <a href="/multi-modal" class="nav-link"><i class="fas fa-robot"></i> Multi-Modal</a>
+            
+            <!-- User Menu Section - ADDED FROM INDEX.HTML -->
+            <div class="user-menu" id="userMenu" style="display: none;">
+                <i class="fas fa-user-circle" style="color: #ED985F; font-size: 1.2rem;"></i>
+                <span class="user-name" id="usernameDisplay"></span>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sentence-container" id="main-content">
+        <!-- Hero Section - MATCHING HISTORY.HTML -->
+        <section class="hero-section">
+            <h1 class="hero-title">
+                <i class="fas fa-pen"></i>
+                Build Complete Sentences
+            </h1>
+            <p class="hero-subtitle">Combine recognized signs to form meaningful sentences. Perfect for real conversations and seamless communication.</p>
+        </section>
+
+        <!-- Main Grid Layout - ADJUSTED -->
+        <div class="main-grid">
+            <!-- Left Column - Live Feed -->
+            <div class="live-feed-card">
+                <div class="video-wrapper">
+                    <img id="videoFeed" src="" alt="Live video feed" class="video-feed">
+                    <div class="camera-status" id="cameraStatus">
+                        <span class="status-dot offline" id="statusDot"></span>
+                        <span id="statusText">Camera Off</span>
+                    </div>
+                </div>
+                
+                <!-- Camera Controls - ADDED -->
+                <div class="camera-controls">
+                    <button class="cam-btn cam-btn-primary" id="startBtn" onclick="startCamera()">
+                        <i class="fas fa-play"></i> Start Camera
+                    </button>
+                    <button class="cam-btn cam-btn-secondary" id="stopBtn" onclick="stopCamera()" disabled>
+                        <i class="fas fa-stop"></i> Stop Camera
+                    </button>
+                </div>
+                
+                <div class="prediction-card">
+                    <div class="prediction-info">
+                        <span class="prediction-label">Current Sign</span>
+                        <span class="prediction-sign" id="currentSign">—</span>
+                    </div>
+                    <span class="prediction-confidence" id="currentConfidence">—</span>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn add" id="addToSentenceBtn" disabled onclick="addToSentence()">
+                        <i class="fas fa-plus-circle"></i> Add to Sentence
+                    </button>
+                    <button class="action-btn speak" id="speakBtn" disabled onclick="speakCurrentSign()">
+                        <i class="fas fa-volume-up"></i> Speak Sign
+                    </button>
+                </div>
+                
+                <div class="suggestions-panel">
+                    <div class="panel-title">
+                        <i class="fas fa-bolt" style="color: #ED985F;"></i>
+                        Quick Phrases
+                    </div>
+                    <div class="suggestions-grid" id="suggestionsList">
+                        <span class="suggestion-chip" onclick="addSuggestion('Hello, how are you?')">Hello, how are you?</span>
+                        <span class="suggestion-chip" onclick="addSuggestion('My name is')">My name is</span>
+                        <span class="suggestion-chip" onclick="addSuggestion('I am from India')">I am from India</span>
+                        <span class="suggestion-chip" onclick="addSuggestion('Thank you')">Thank you</span>
+                        <span class="suggestion-chip" onclick="addSuggestion('Nice to meet you')">Nice to meet you</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column - Sentence Builder -->
+            <div class="builder-card">
+                <div class="builder-header">
+                    <div class="builder-title">
+                        <i class="fas fa-pen" style="color: #ED985F;"></i>
+                        Your Sentence
+                    </div>
+                    <div class="builder-controls">
+                        <button class="control-btn" onclick="removeLastWord()" title="Remove last word">
+                            <i class="fas fa-undo-alt"></i>
+                        </button>
+                        <button class="control-btn" onclick="clearSentence()" title="Clear sentence">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="control-btn" onclick="saveSentence()" title="Save sentence">
+                            <i class="fas fa-save"></i>
+                        </button>
+                        <button class="control-btn" onclick="speakFullSentence()" title="Speak sentence">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sentence-display" id="sentenceDisplay">
+                    Your sentence will appear here...
+                </div>
+                
+                <div class="word-chips" id="wordChips"></div>
+                
+                <div class="suggestions-panel">
+                    <div class="panel-title">
+                        <i class="fas fa-lightbulb" style="color: #ED985F;"></i>
+                        Based on your last word
+                    </div>
+                    <div class="suggestions-grid" id="contextSuggestions"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Section - ADJUSTED -->
+        <section class="history-section">
+            <div class="history-header">
+                <div class="history-title">
+                    <i class="fas fa-history" style="color: #ED985F;"></i>
+                    Saved Sentences
+                </div>
+                <button class="control-btn" onclick="refreshHistory()" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div class="history-grid" id="historyList">
+                <div class="empty-state">
+                    <div class="empty-icon">📜</div>
+                    <div>No saved sentences yet</div>
+                    <div style="font-size: 0.9rem; margin-top: 0.5rem;">Build and save a sentence to see it here</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phrase Library - ADJUSTED -->
+        <section class="phrase-library">
+            <div class="library-title">
+                <i class="fas fa-book" style="color: #ED985F;"></i>
+                Common ISL Phrases
+            </div>
+            <div class="phrase-grid">
+                <div class="phrase-card" onclick="addPhrase('INDIA')">
+                    <span>🇮🇳</span> I am Indian
+                </div>
+                <div class="phrase-card" onclick="addPhrase('NAME_SIGN')">
+                    <span>👤</span> My name is...
+                </div>
+                <div class="phrase-card" onclick="addPhrase('HOW_YOU')">
+                    <span>🤔</span> How are you?
+                </div>
+                <div class="phrase-card" onclick="addPhrase('FINE')">
+                    <span>😊</span> I am fine
+                </div>
+                <div class="phrase-card" onclick="addPhrase('THANK_YOU')">
+                    <span>🙏</span> Thank you
+                </div>
+                <div class="phrase-card" onclick="addPhrase('SORRY')">
+                    <span>😔</span> Sorry
+                </div>
+                <div class="phrase-card" onclick="addPhrase('HELP_ME')">
+                    <span>🆘</span> Can you help me?
+                </div>
+                <div class="phrase-card" onclick="addPhrase('WHERE_BATHROOM')">
+                    <span>🚻</span> Where is bathroom?
+                </div>
+                <div class="phrase-card" onclick="addPhrase('NICE_MEET')">
+                    <span>🤝</span> Nice to meet you
+                </div>
+                <div class="phrase-card" onclick="addPhrase('GOOD_MORNING')">
+                    <span>🌅</span> Good morning
+                </div>
+            </div>
+        </section>
+
+        <!-- Info Card - MATCHING HISTORY.HTML -->
+        <div class="info-card">
+            <div class="info-content">
+                <i class="fas fa-info-circle info-icon"></i>
+                <div class="info-text">
+                    <h4>How to Build Sentences</h4>
+                    <p>Make a sign in front of the camera, then click "Add to Sentence" to include it. Use the quick phrases or common phrases to build complete sentences faster.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SESSION CHECK AND LOGOUT FUNCTIONS - ADDED FROM INDEX.HTML =====
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/session/status');
+                const data = await response.json();
+                
+                if (!data.logged_in) {
+                    window.location.href = '/login';
+                    return false;
+                }
+                
+                const userMenu = document.getElementById('userMenu');
+                const usernameDisplay = document.getElementById('usernameDisplay');
+                
+                if (userMenu && usernameDisplay) {
+                    userMenu.style.display = 'flex';
+                    usernameDisplay.textContent = data.username || data.user_id;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Session check failed:', error);
+                return false;
+            }
+        }
+
+        async function logout() {
+            // Stop camera if active
+            if (cameraActive) {
+                stopCamera();
+            }
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/login';
+        }
+
+        // ===== SENTENCE BUILDER STATE =====
+        let currentWords = [];
+        let predictionInterval = null;
+        let latestPrediction = { sign: '—', confidence: 0 };
+        let cameraActive = false;
+        let isSpeaking = false;
+        let ttsInitialized = false;
+
+        // ===== DOM ELEMENTS =====
+        const videoFeed = document.getElementById('videoFeed');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const addBtn = document.getElementById('addToSentenceBtn');
+        const speakBtn = document.getElementById('speakBtn');
+        const currentSign = document.getElementById('currentSign');
+        const currentConfidence = document.getElementById('currentConfidence');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        // ===== CAMERA FUNCTIONS (MATCHING INDEX.HTML) =====
+        function startCamera() {
+            fetch('/start')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'started') {
+                        cameraActive = true;
+                        videoFeed.src = "/video_feed?" + new Date().getTime();
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+                        addBtn.disabled = false;
+                        speakBtn.disabled = false;
+                        statusDot.className = 'status-dot';
+                        statusText.textContent = 'Camera Active';
+                        startPredictionPolling();
+                        checkTTSStatus();
+                        console.log('✅ Camera started');
+                    }
+                })
+                .catch(err => {
+                    console.error('Camera start error:', err);
+                    alert('Failed to start camera. Please check permissions.');
+                });
+        }
+
+        function stopCamera() {
+            cameraActive = false;
+            videoFeed.src = "";
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            addBtn.disabled = true;
+            speakBtn.disabled = true;
+            statusDot.className = 'status-dot offline';
+            statusText.textContent = 'Camera Off';
+            
+            if (predictionInterval) {
+                clearInterval(predictionInterval);
+                predictionInterval = null;
+            }
+            
+            fetch('/stop')
+                .catch(err => console.warn('Stop error:', err));
+            
+            console.log('📷 Camera stopped');
+        }
+
+        // ===== PREDICTION POLLING (MATCHING INDEX.HTML) =====
+        function startPredictionPolling() {
+            if (predictionInterval) clearInterval(predictionInterval);
+            
+            predictionInterval = setInterval(() => {
+                if (!cameraActive) return;
+                
+                fetch('/current_prediction?' + new Date().getTime())
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network error');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data && data.sign !== undefined) {
+                            latestPrediction = data;
+                            updatePredictionDisplay();
+                            
+                            // Fetch suggestions based on current sign
+                            if (data.sign && data.sign !== '—' && data.sign !== 'No hand' && data.confidence > 0.5) {
+                                fetchSuggestions(data.sign);
+                            }
+                        }
+                    })
+                    .catch(err => console.warn('Prediction fetch failed:', err));
+            }, 300);
+        }
+
+        function updatePredictionDisplay() {
+            currentSign.textContent = latestPrediction.sign || '—';
+            
+            if (latestPrediction.confidence !== undefined) {
+                const confidencePercent = (latestPrediction.confidence * 100).toFixed(1);
+                currentConfidence.textContent = `${confidencePercent}%`;
+                
+                if (latestPrediction.confidence > 0.8) {
+                    currentConfidence.style.color = '#10b981';
+                } else if (latestPrediction.confidence > 0.5) {
+                    currentConfidence.style.color = '#ED985F';
+                } else {
+                    currentConfidence.style.color = '#ef4444';
+                }
+            } else {
+                currentConfidence.textContent = '—';
+            }
+        }
+
+        // ===== TTS FUNCTIONS (MATCHING INDEX.HTML) =====
+        function checkTTSStatus() {
+            fetch('/api/tts-status?' + new Date().getTime())
+                .then(response => response.json())
+                .then(data => {
+                    ttsInitialized = data.initialized;
+                    console.log('TTS initialized:', ttsInitialized);
+                })
+                .catch(() => {
+                    ttsInitialized = false;
+                });
+        }
+
+        function speakText(text) {
+            if (!cameraActive) {
+                console.log('Camera not active');
+                return;
+            }
+            
+            if (isSpeaking) {
+                console.log('Already speaking');
+                return;
+            }
+            
+            isSpeaking = true;
+            console.log('Speaking:', text);
+            
+            fetch('/api/speak', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const speechDuration = Math.max(1500, text.length * 100);
+                    setTimeout(() => {
+                        isSpeaking = false;
+                        console.log('Speech finished');
+                    }, speechDuration);
+                } else {
+                    isSpeaking = false;
+                    fallbackSpeak(text);
+                }
+            })
+            .catch(err => {
+                console.error('TTS error:', err);
+                isSpeaking = false;
+                fallbackSpeak(text);
+            });
+        }
+
+        function fallbackSpeak(text) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                // Get available voices
+                const voices = window.speechSynthesis.getVoices();
+                const englishVoice = voices.find(v => v.lang.includes('en'));
+                if (englishVoice) {
+                    utterance.voice = englishVoice;
+                }
+                
+                utterance.onstart = () => {
+                    isSpeaking = true;
+                    console.log('Fallback speaking started');
+                };
+                
+                utterance.onend = () => {
+                    isSpeaking = false;
+                    console.log('Fallback speaking ended');
+                };
+                
+                utterance.onerror = () => {
+                    isSpeaking = false;
+                };
+                
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCurrentSign() {
+            if (latestPrediction.sign && latestPrediction.sign !== '—' && latestPrediction.sign !== 'No hand') {
+                speakText(latestPrediction.sign);
+                
+                // Visual feedback
+                speakBtn.style.background = '#10b981';
+                setTimeout(() => speakBtn.style.background = '', 500);
+            } else {
+                alert('No sign detected');
+            }
+        }
+
+        // ===== SENTENCE BUILDING FUNCTIONS =====
+        function addToSentence() {
+            if (latestPrediction.sign && latestPrediction.sign !== '—' && latestPrediction.sign !== 'No hand') {
+                if (latestPrediction.confidence < 0.5) {
+                    if (!confirm('Low confidence detection. Add anyway?')) {
+                        return;
+                    }
+                }
+                
+                fetch(`/api/sentence/add/${encodeURIComponent(latestPrediction.sign)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            updateSentenceDisplay(data);
+                            // Visual feedback
+                            addBtn.style.transform = 'scale(0.95)';
+                            addBtn.style.background = '#10b981';
+                            setTimeout(() => {
+                                addBtn.style.transform = '';
+                                addBtn.style.background = '';
+                            }, 200);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Add to sentence error:', err);
+                        alert('Failed to add word to sentence');
+                    });
+            } else {
+                alert('No valid sign detected. Please show a sign to the camera.');
+            }
+        }
+        
+        function removeLastWord() {
+            fetch('/api/sentence/remove_last')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        updateSentenceDisplay(data);
+                    }
+                })
+                .catch(err => {
+                    console.error('Remove word error:', err);
+                });
+        }
+        
+        function clearSentence() {
+            if (currentWords.length > 0) {
+                if (confirm('Clear current sentence?')) {
+                    fetch('/api/sentence/clear')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                currentWords = [];
+                                updateSentenceDisplay({ words: [], current_sentence: '' });
+                            }
+                        });
+                }
+            }
+        }
+        
+        function saveSentence() {
+            const sentence = document.getElementById('sentenceDisplay').textContent;
+            if (sentence && sentence !== 'Your sentence will appear here...') {
+                fetch('/api/sentence/save')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            refreshHistory();
+                            // Visual feedback
+                            const saveBtn = document.querySelector('[onclick="saveSentence()"]');
+                            if (saveBtn) {
+                                saveBtn.style.color = '#10b981';
+                                setTimeout(() => saveBtn.style.color = '', 500);
+                            }
+                            alert('✅ Sentence saved!');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Save error:', err);
+                        alert('Failed to save sentence');
+                    });
+            }
+        }
+        
+        function updateSentenceDisplay(data) {
+            currentWords = data.words || [];
+            
+            // Update sentence text
+            const sentenceDisplay = document.getElementById('sentenceDisplay');
+            sentenceDisplay.textContent = data.current_sentence || 'Your sentence will appear here...';
+            
+            // Update word chips
+            const chipsContainer = document.getElementById('wordChips');
+            chipsContainer.innerHTML = '';
+            
+            if (currentWords.length > 0) {
+                currentWords.forEach((word, index) => {
+                    const chip = document.createElement('span');
+                    chip.className = 'word-chip';
+                    chip.innerHTML = `
+                        ${word.mapped || word.original || word}
+                        <span class="remove" onclick="removeWordAtIndex(${index})">✕</span>
+                    `;
+                    chipsContainer.appendChild(chip);
+                });
+            }
+        }
+        
+        function removeWordAtIndex(index) {
+            const wordsToRemove = currentWords.length - index;
+            for (let i = 0; i < wordsToRemove; i++) {
+                removeLastWord();
+            }
+        }
+        
+        // ===== SUGGESTIONS =====
+        function fetchSuggestions(sign) {
+            if (!sign || sign === '—' || sign === 'No hand') return;
+            
+            // Common word associations for suggestions
+            const suggestions = {
+                'I': ['am', 'want', 'like', 'need', 'love'],
+                'YOU': ['are', 'want', 'like', 'need'],
+                'HELLO': ['how are you', 'nice to meet you'],
+                'THANK_YOU': ['very much', 'so much'],
+                'INDIA': ['is my country', 'I am from'],
+                'NAME': ['my name is', 'what is your'],
+                'HELP': ['me please', 'can you'],
+                'GOOD': ['morning', 'night', 'afternoon', 'day'],
+                'YES': ['I agree', 'that is correct'],
+                'NO': ['thank you', 'I disagree'],
+                'PLEASE': ['help me', 'come here'],
+                'SORRY': ['I am sorry', 'my mistake'],
+                'NICE': ['to meet you', 'day']
+            };
+            
+            const suggestionList = suggestions[sign] || ['the', 'and', 'is', 'are', 'to'];
+            
+            const suggestionsDiv = document.getElementById('contextSuggestions');
+            suggestionsDiv.innerHTML = suggestionList.map(word => 
+                `<span class="suggestion-chip" onclick="addWord('${word}')">${word}</span>`
+            ).join('');
+        }
+        
+        function addWord(word) {
+            fetch(`/api/sentence/add/${encodeURIComponent(word)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        updateSentenceDisplay(data);
+                    }
+                });
+        }
+        
+        function addSuggestion(phrase) {
+            const words = phrase.split(' ');
+            let index = 0;
+            
+            function addNext() {
+                if (index < words.length) {
+                    fetch(`/api/sentence/add/${encodeURIComponent(words[index])}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                updateSentenceDisplay(data);
+                                index++;
+                                addNext();
+                            }
+                        });
+                }
+            }
+            addNext();
+        }
+        
+        function addPhrase(phraseKey) {
+            // Map phrase keys to actual words
+            const phraseMap = {
+                'INDIA': 'I am Indian',
+                'NAME_SIGN': 'My name is',
+                'HOW_YOU': 'How are you',
+                'FINE': 'I am fine',
+                'THANK_YOU': 'Thank you',
+                'SORRY': 'Sorry',
+                'HELP_ME': 'Help me please',
+                'WHERE_BATHROOM': 'Where is bathroom',
+                'NICE_MEET': 'Nice to meet you',
+                'GOOD_MORNING': 'Good morning'
+            };
+            
+            const phrase = phraseMap[phraseKey] || phraseKey;
+            addSuggestion(phrase);
+        }
+        
+        // ===== SPEECH FUNCTIONS =====
+        function speakFullSentence() {
+            const sentence = document.getElementById('sentenceDisplay').textContent;
+            if (sentence && sentence !== 'Your sentence will appear here...') {
+                speakText(sentence);
+                
+                // Visual feedback
+                const btn = document.querySelector('[onclick="speakFullSentence()"]');
+                if (btn) {
+                    btn.style.color = '#10b981';
+                    btn.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        btn.style.color = '';
+                        btn.style.transform = '';
+                    }, 500);
+                }
+            } else {
+                alert('No sentence to speak');
+            }
+        }
+        
+        // ===== HISTORY FUNCTIONS =====
+        function refreshHistory() {
+            fetch('/api/sentence/history')
+                .then(response => response.json())
+                .then(data => {
+                    const historyDiv = document.getElementById('historyList');
+                    if (data && data.length > 0) {
+                        historyDiv.innerHTML = data.slice().reverse().map(item => {
+                            const sentence = typeof item === 'string' ? item : item.sentence;
+                            const timestamp = item.timestamp ? new Date(item.timestamp) : new Date();
+                            
+                            return `
+                                <div class="history-item">
+                                    <div class="history-content">
+                                        <div class="history-text">${sentence}</div>
+                                        <div class="history-time">${timestamp.toLocaleString()}</div>
+                                    </div>
+                                    <div class="history-actions">
+                                        <button class="history-btn" onclick="useSentence('${sentence.replace(/'/g, "\\'")}')" title="Use this sentence">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </button>
+                                        <button class="history-btn" onclick="speakText('${sentence.replace(/'/g, "\\'")}')" title="Speak">
+                                            <i class="fas fa-volume-up"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        historyDiv.innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">📜</div>
+                                <div>No saved sentences yet</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem;">Build and save a sentence to see it here</div>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(err => {
+                    console.error('History fetch error:', err);
+                });
+        }
+        
+        function useSentence(sentence) {
+            clearSentence();
+            addSuggestion(sentence);
+        }
+        
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 Sentence Builder loaded');
+            
+            // Check session first
+            await checkSession();
+            
+            // Load current sentence if any
+            fetch('/api/sentence/current')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.words && data.words.length > 0) {
+                        updateSentenceDisplay(data);
+                    }
+                })
+                .catch(err => console.warn('Failed to load current sentence:', err));
+            
+            // Load history
+            refreshHistory();
+            
+            // Pre-load TTS voices
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+            
+            // Check TTS status periodically
+            setInterval(checkTTSStatus, 10000);
+        });
+        
+        // ===== CLEANUP =====
+        window.addEventListener('beforeunload', function() {
+            if (cameraActive) {
+                stopCamera();
+            }
+        });
+
+        // Expose functions globally for onclick handlers
+        window.startCamera = startCamera;
+        window.stopCamera = stopCamera;
+        window.addToSentence = addToSentence;
+        window.speakCurrentSign = speakCurrentSign;
+        window.removeLastWord = removeLastWord;
+        window.clearSentence = clearSentence;
+        window.saveSentence = saveSentence;
+        window.speakFullSentence = speakFullSentence;
+        window.addSuggestion = addSuggestion;
+        window.addPhrase = addPhrase;
+        window.refreshHistory = refreshHistory;
+        window.speakText = speakText;
+        window.useSentence = useSentence;
+        window.removeWordAtIndex = removeWordAtIndex;
+        window.addWord = addWord;
+        window.logout = logout;
+    </script>
+
+    <!-- Accessibility Panel -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='accessibility.css') }}">
+    <script src="{{ url_for('static', filename='accessibility.js') }}"></script>
+    {% include 'accessibility_panel.html' %}
+</body>
+</html>

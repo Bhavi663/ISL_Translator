@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Translator | Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* RESET ALL MARGINS AND PADDINGS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* FULL PAGE CENTERING - GUARANTEED */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('/static/background_image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
+            /* FLEXBOX CENTERING - THIS IS THE KEY */
+            display: flex;
+            align-items: center;     /* Vertical centering */
+            justify-content: center; /* Horizontal centering */
+            
+            min-height: 100vh;
+            width: 100vw;
+        }
+        
+        /* MAIN CONTAINER - PERFECT CENTERING */
+        .auth-container {
+            width: 800px;
+            max-width: 90%;
+            background: white;
+            border-radius: 2.5rem;
+            border: 2px solid #F7B980;
+            box-shadow: 0 30px 50px -12px rgba(0,31,61,0.25);
+            animation: fadeIn 0.5s ease;
+            
+            /* NO POSITIONING HACKS - just clean padding */
+            padding: 2rem 3.5rem;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-header h1 {
+            color: #001F3D;
+            font-size: 2.2rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+        }
+        
+        .auth-header i {
+            color: #ED985F;
+            font-size: 3rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .auth-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #001F3D;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .form-group label i {
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            border: 2px solid #F7B980;
+            border-radius: 100px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8fafc;
+            outline: none;
+        }
+        
+        .form-group input:focus {
+            border-color: #ED985F;
+            box-shadow: 0 0 0 4px rgba(237,152,95,0.1);
+            background: white;
+        }
+        
+        .form-group input::placeholder {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: #ED985F;
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            box-shadow: 0 8px 15px -5px rgba(237,152,95,0.3);
+        }
+        
+        .auth-btn:hover {
+            background: #F7B980;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -8px rgba(237,152,95,0.4);
+        }
+        
+        .auth-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .auth-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.25rem;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        .auth-footer a {
+            color: #ED985F;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            padding: 0.25rem 0.5rem;
+            border-radius: 100px;
+        }
+        
+        .auth-footer a:hover {
+            background: #fff5eb;
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            padding: 0.5rem;
+            background: #fef2f2;
+            border-radius: 100px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .success-message {
+            color: #10b981;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            padding: 0.5rem;
+            background: #e6f7e6;
+            border-radius: 100px;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .password-strength {
+            height: 5px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-top: 0.4rem;
+            overflow: hidden;
+        }
+        
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 3px;
+        }
+        
+        .strength-text {
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .privacy-note {
+            margin-top: 1.25rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            padding: 0.75rem;
+            background: #f8fafc;
+            border-radius: 100px;
+            border: 1px solid #F7B980;
+        }
+        
+        .privacy-note i {
+            color: #10b981;
+            margin-right: 0.5rem;
+        }
+        
+        /* Loading spinner for button */
+        .auth-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .auth-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .auth-container {
+                width: 90%;
+                padding: 1.75rem 2.5rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .auth-container {
+                width: 95%;
+                padding: 1.5rem 2rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 2rem;
+            }
+            
+            .auth-header i {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 1.25rem 1.5rem;
+            }
+            
+            .auth-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .auth-header i {
+                font-size: 2.5rem;
+            }
+            
+            .form-group input {
+                padding: 0.75rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <i class="fas fa-universal-access"></i>
+            <h1>Create Account</h1>
+            <p>Join ISL Translator Community</p>
+        </div>
+        
+        <div id="register-form">
+            <div class="form-group">
+                <label><i class="fas fa-user" style="color: #ED985F;"></i> Username</label>
+                <input type="text" id="username" placeholder="Choose a username" autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-envelope" style="color: #ED985F;"></i> Email (Optional)</label>
+                <input type="email" id="email" placeholder="Enter your email" autocomplete="email">
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-lock" style="color: #ED985F;"></i> Password</label>
+                <input type="password" id="password" placeholder="Create a password" autocomplete="new-password" onkeyup="checkPasswordStrength()">
+                <div class="password-strength">
+                    <div class="strength-bar" id="strengthBar"></div>
+                </div>
+                <div class="strength-text" id="strengthText">Enter password</div>
+            </div>
+            
+            <div class="form-group">
+                <label><i class="fas fa-lock" style="color: #ED985F;"></i> Confirm Password</label>
+                <input type="password" id="confirm" placeholder="Confirm your password" autocomplete="new-password">
+            </div>
+            
+            <button class="auth-btn" onclick="register()" id="registerBtn">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+            
+            <div id="error-message" class="error-message"></div>
+            <div id="success-message" class="success-message"></div>
+        </div>
+        
+        <div class="auth-footer">
+            Already have an account? <a href="/login">Sign in</a>
+        </div>
+        
+        <div class="privacy-note">
+            <i class="fas fa-shield-alt"></i> Your data is encrypted and never shared with third parties
+        </div>
+    </div>
+
+    <script>
+    function checkPasswordStrength() {
+        const password = document.getElementById('password').value;
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        
+        let strength = 0;
+        let feedback = '';
+        
+        if (password.length >= 8) strength += 25;
+        if (password.match(/[a-z]+/)) strength += 25;
+        if (password.match(/[A-Z]+/)) strength += 25;
+        if (password.match(/[0-9]+/)) strength += 25;
+        if (password.match(/[$@#&!]+/)) strength += 25;
+        
+        strength = Math.min(100, strength);
+        strengthBar.style.width = strength + '%';
+        
+        if (strength < 25) {
+            strengthBar.style.background = '#ef4444';
+            feedback = 'Very weak';
+        } else if (strength < 50) {
+            strengthBar.style.background = '#f59e0b';
+            feedback = 'Weak';
+        } else if (strength < 75) {
+            strengthBar.style.background = '#ED985F';
+            feedback = 'Medium';
+        } else {
+            strengthBar.style.background = '#10b981';
+            feedback = 'Strong';
+        }
+        
+        strengthText.textContent = feedback + ' password';
+    }
+
+    async function register() {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
+        const registerBtn = document.getElementById('registerBtn');
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        
+        // Hide previous messages
+        errorDiv.classList.remove('show');
+        successDiv.classList.remove('show');
+        
+        // Validation
+        if (!username || !password || !confirm) {
+            errorDiv.textContent = 'Please fill in all required fields';
+            errorDiv.classList.add('show');
+            return;
+        }
+        
+        if (password !== confirm) {
+            errorDiv.textContent = 'Passwords do not match';
+            errorDiv.classList.add('show');
+            return;
+        }
+        
+        if (password.length < 6) {
+            errorDiv.textContent = 'Password must be at least 6 characters';
+            errorDiv.classList.add('show');
+            return;
+        }
+        
+        // Show loading state
+        registerBtn.classList.add('loading');
+        registerBtn.disabled = true;
+        registerBtn.innerHTML = '<i class="fas fa-spinner"></i> Creating Account...';
+        
+        try {
+            const response = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                successDiv.textContent = 'Registration successful! Redirecting to login...';
+                successDiv.classList.add('show');
+                
+                // Reset button state
+                registerBtn.classList.remove('loading');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                
+                // Redirect after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            } else {
+                errorDiv.textContent = data.error || 'Registration failed';
+                errorDiv.classList.add('show');
+                
+                // Reset button state
+                registerBtn.classList.remove('loading');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            }
+        } catch (error) {
+            errorDiv.textContent = 'Registration failed. Please try again.';
+            errorDiv.classList.add('show');
+            
+            // Reset button state
+            registerBtn.classList.remove('loading');
+            registerBtn.disabled = false;
+            registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+        }
+    }
+
+    // Check if already logged in
+    async function checkLoginStatus() {
+        try {
+            const response = await fetch('/api/session/status');
+            const data = await response.json();
+            if (data.logged_in) {
+                window.location.href = '/';
+            }
+        } catch (error) {
+            console.error('Session check failed:', error);
+        }
+    }
+
+    // Allow Enter key to submit
+    document.getElementById('confirm').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            register();
+        }
+    });
+
+    // Real-time password match check
+    document.getElementById('confirm').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirm = this.value;
+        const errorDiv = document.getElementById('error-message');
+        
+        if (confirm && password !== confirm) {
+            errorDiv.textContent = 'Passwords do not match';
+            errorDiv.classList.add('show');
+        } else if (confirm && password === confirm) {
+            errorDiv.classList.remove('show');
+        }
+    });
+
+    // Check login status when page loads
+    checkLoginStatus();
+    </script>
+</body>
+</html>

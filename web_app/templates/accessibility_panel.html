@@ -1,0 +1,498 @@
+<!-- Accessibility Panel Component -->
+<div class="accessibility-panel" aria-label="Accessibility options panel">
+    <!-- Accessibility Announcer (screen reader only) -->
+    <div id="accessibilityAnnouncer" class="sr-only" aria-live="polite" role="status"></div>
+    
+    <!-- Main Toggle Button -->
+    <button class="accessibility-toggle-btn" onclick="toggleAccessibilityMenu()" aria-label="Open accessibility menu" aria-expanded="false" aria-controls="accessibilityMenu">
+        <i class="fas fa-universal-access" aria-hidden="true"></i>
+        <span class="sr-only">Accessibility options</span>
+    </button>
+    
+    <!-- Accessibility Menu -->
+    <div class="accessibility-menu" id="accessibilityMenu" role="dialog" aria-label="Accessibility settings" hidden>
+        <div class="accessibility-menu-header">
+            <h3><i class="fas fa-universal-access" style="color: #ED985F; margin-right: 0.5rem;"></i>Accessibility Options</h3>
+            <button class="accessibility-close-btn" onclick="toggleAccessibilityMenu()" aria-label="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="accessibility-menu-content">
+            <div class="accessibility-option">
+                <div class="option-info">
+                    <span class="option-icon">🌙</span>
+                    <label for="darkModeToggle">Dark Mode</label>
+                </div>
+                <label class="switch" aria-label="Toggle dark mode">
+                    <input type="checkbox" id="darkModeToggle" data-accessibility-toggle="darkMode" 
+                           onchange="accessibility.toggle('darkMode')" 
+                           {% if session.get('dark_mode') %}checked{% endif %}
+                           aria-describedby="darkModeDesc">
+                    <span class="slider"></span>
+                </label>
+                <span id="darkModeDesc" class="sr-only">Reduces eye strain in low-light conditions</span>
+            </div>
+            
+            <div class="accessibility-option">
+                <div class="option-info">
+                    <span class="option-icon">🔤</span>
+                    <label for="largeTextToggle">Large Text</label>
+                </div>
+                <label class="switch" aria-label="Toggle large text">
+                    <input type="checkbox" id="largeTextToggle" data-accessibility-toggle="largeText" 
+                           onchange="accessibility.toggle('largeText')"
+                           {% if session.get('large_text') %}checked{% endif %}
+                           aria-describedby="largeTextDesc">
+                    <span class="slider"></span>
+                </label>
+                <span id="largeTextDesc" class="sr-only">Increases font size for better readability</span>
+            </div>
+            
+            <div class="accessibility-option">
+                <div class="option-info">
+                    <span class="option-icon">◐</span>
+                    <label for="highContrastToggle">High Contrast</label>
+                </div>
+                <label class="switch" aria-label="Toggle high contrast">
+                    <input type="checkbox" id="highContrastToggle" data-accessibility-toggle="highContrast" 
+                           onchange="accessibility.toggle('highContrast')"
+                           {% if session.get('high_contrast') %}checked{% endif %}
+                           aria-describedby="contrastDesc">
+                    <span class="slider"></span>
+                </label>
+                <span id="contrastDesc" class="sr-only">Enhances contrast for better visibility</span>
+            </div>
+            
+            <div class="accessibility-option">
+                <div class="option-info">
+                    <span class="option-icon">🐢</span>
+                    <label for="reducedMotionToggle">Reduced Motion</label>
+                </div>
+                <label class="switch" aria-label="Toggle reduced motion">
+                    <input type="checkbox" id="reducedMotionToggle" data-accessibility-toggle="reducedMotion" 
+                           onchange="accessibility.toggle('reducedMotion')"
+                           {% if session.get('reduced_motion') %}checked{% endif %}
+                           aria-describedby="motionDesc">
+                    <span class="slider"></span>
+                </label>
+                <span id="motionDesc" class="sr-only">Minimizes animations for vestibular sensitivity</span>
+            </div>
+        </div>
+        
+        <div class="accessibility-menu-footer">
+            <div class="settings-status">
+                <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                <span>Settings saved automatically</span>
+            </div>
+            <button class="reset-settings-btn" onclick="resetAccessibilitySettings()" aria-label="Reset all accessibility settings">
+                <i class="fas fa-undo-alt"></i> Reset
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== ACCESSIBILITY PANEL PROFESSIONAL STYLES ===== */
+.accessibility-panel {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== MAIN TOGGLE BUTTON ===== */
+.accessibility-toggle-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #001F3D, #0a2a4a);
+    color: white;
+    border: 2px solid #ED985F;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 15px rgba(0,31,61,0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    outline: none;
+}
+
+.accessibility-toggle-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    background: linear-gradient(135deg, #ED985F, #F7B980);
+    border-color: #001F3D;
+    box-shadow: 0 8px 25px rgba(237,152,95,0.4);
+}
+
+.accessibility-toggle-btn:focus-visible {
+    outline: 3px solid #ED985F;
+    outline-offset: 2px;
+}
+
+/* ===== ACCESSIBILITY MENU ===== */
+.accessibility-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 320px;
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px -12px rgba(0,31,61,0.3);
+    border: 2px solid #ED985F;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.accessibility-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ===== MENU HEADER ===== */
+.accessibility-menu-header {
+    background: linear-gradient(135deg, #001F3D, #0a2a4a);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ED985F;
+}
+
+.accessibility-menu-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.accessibility-close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.accessibility-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: rotate(90deg);
+}
+
+/* ===== MENU CONTENT ===== */
+.accessibility-menu-content {
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.accessibility-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #E6E6E6;
+    transition: background 0.2s;
+}
+
+.accessibility-option:hover {
+    background: #fff5eb;
+}
+
+.option-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.option-icon {
+    font-size: 1.2rem;
+    width: 24px;
+}
+
+.option-info label {
+    color: #001F3D;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* ===== TOGGLE SWITCH ===== */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E6E6E6;
+    transition: .3s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+    background-color: #ED985F;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+input:focus-visible + .slider {
+    outline: 3px solid #001F3D;
+    outline-offset: 2px;
+}
+
+/* ===== MENU FOOTER ===== */
+.accessibility-menu-footer {
+    padding: 1rem;
+    background: #f8fafc;
+    border-top: 1px solid #F7B980;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.reset-settings-btn {
+    background: transparent;
+    border: 1px solid #ED985F;
+    color: #001F3D;
+    padding: 0.4rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.reset-settings-btn:hover {
+    background: #ED985F;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .accessibility-panel {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    
+    .accessibility-menu {
+        width: 280px;
+        right: 0;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.accessibility-toggle-btn:active {
+    animation: pulse 0.3s ease;
+}
+
+/* ===== DARK MODE SUPPORT ===== */
+body.dark-mode .accessibility-menu {
+    background: #2d2d2d;
+    border-color: #ED985F;
+}
+
+body.dark-mode .accessibility-option {
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .option-info label {
+    color: white;
+}
+
+body.dark-mode .accessibility-menu-footer {
+    background: #404040;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+</style>
+
+<script>
+// ===== ENHANCED ACCESSIBILITY PANEL FUNCTIONS =====
+function toggleAccessibilityMenu() {
+    const menu = document.getElementById('accessibilityMenu');
+    const toggleBtn = document.querySelector('.accessibility-toggle-btn');
+    const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    
+    menu.classList.toggle('show');
+    toggleBtn.setAttribute('aria-expanded', !isExpanded);
+    menu.hidden = !menu.classList.contains('show');
+    
+    // Focus management
+    if (!isExpanded) {
+        setTimeout(() => {
+            menu.querySelector('input')?.focus();
+        }, 100);
+    }
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('accessibilityMenu');
+    const toggle = document.querySelector('.accessibility-toggle-btn');
+    
+    if (menu && toggle) {
+        if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+            menu.classList.remove('show');
+            toggle.setAttribute('aria-expanded', 'false');
+            menu.hidden = true;
+        }
+    }
+});
+
+// Close menu with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const menu = document.getElementById('accessibilityMenu');
+        const toggle = document.querySelector('.accessibility-toggle-btn');
+        
+        if (menu && menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            toggle.setAttribute('aria-expanded', 'false');
+            menu.hidden = true;
+            toggle.focus();
+        }
+    }
+});
+
+// Reset accessibility settings
+function resetAccessibilitySettings() {
+    if (confirm('Reset all accessibility settings to default?')) {
+        fetch('/api/accessibility/reset', { method: 'POST' })
+            .then(response => response.json())
+            .then(() => {
+                if (window.accessibility) {
+                    window.accessibility.settings = {
+                        darkMode: false,
+                        largeText: false,
+                        highContrast: false,
+                        reducedMotion: false
+                    };
+                    window.accessibility.saveSettings();
+                    window.accessibility.applySettings();
+                    
+                    // Update toggle checkboxes
+                    document.getElementById('darkModeToggle').checked = false;
+                    document.getElementById('largeTextToggle').checked = false;
+                    document.getElementById('highContrastToggle').checked = false;
+                    document.getElementById('reducedMotionToggle').checked = false;
+                    
+                    // Announce reset
+                    const announcer = document.getElementById('accessibilityAnnouncer');
+                    announcer.textContent = 'Accessibility settings reset to default';
+                }
+            })
+            .catch(err => console.error('Reset failed:', err));
+    }
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set initial ARIA attributes
+    const toggleBtn = document.querySelector('.accessibility-toggle-btn');
+    if (toggleBtn) {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    
+    // Hide menu initially
+    const menu = document.getElementById('accessibilityMenu');
+    if (menu) {
+        menu.hidden = true;
+    }
+    
+    // Watch for accessibility toggles
+    if (window.accessibility) {
+        const originalToggle = window.accessibility.toggle;
+        window.accessibility.toggle = function(setting) {
+            originalToggle.call(this, setting);
+            
+            // Update checkbox state
+            const checkbox = document.getElementById(setting === 'darkMode' ? 'darkModeToggle' :
+                                                    setting === 'largeText' ? 'largeTextToggle' :
+                                                    setting === 'highContrast' ? 'highContrastToggle' :
+                                                    'reducedMotionToggle');
+            if (checkbox) {
+                checkbox.checked = this.settings[setting];
+            }
+            
+            // Announce change
+            const announcer = document.getElementById('accessibilityAnnouncer');
+            announcer.textContent = `${setting} toggled ${this.settings[setting] ? 'on' : 'off'}`;
+        };
+    }
+});
+</script>
