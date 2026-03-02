@@ -1,32 +1,11 @@
-# Create .gitignore file
-echo __pycache__/ > .gitignore
-echo *.pyc >> .gitignore
+# Update .gitignore
+echo dataset/ >> .gitignore
+echo data/ >> .gitignore
+echo models/ >> .gitignore
+echo models_backup/ >> .gitignore
 echo venv/ >> .gitignore
-echo env/ >> .gitignore
-echo .env >> .gitignore
-echo instance/ >> .gitignore
-echo .pytest_cache/ >> .gitignore
-echo .vscode/ >> .gitignore
-echo .idea/ >> .gitignore
-echo *.log >> .gitignoreECHO is on.
-dataset/ 
-data/ 
-images/ 
-training_data/ 
-*.jpg 
-*.jpeg 
-*.png 
-*.gif 
-*.bmp 
-*.tiff 
-*.webp 
-ECHO is on.
-*.h5 
-*.hdf5 
-*.pkl 
-*.joblib 
-*.pt 
-*.pth 
-*.weights 
-*.pb 
-*.onnx 
+echo *.h5 >> .gitignore
+echo *.pkl >> .gitignore
+echo *.jpg >> .gitignore
+echo *.jpeg >> .gitignore
+echo *.png >> .gitignore
