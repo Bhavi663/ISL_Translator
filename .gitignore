@@ -8,4 +8,25 @@ echo instance/ >> .gitignore
 echo .pytest_cache/ >> .gitignore
 echo .vscode/ >> .gitignore
 echo .idea/ >> .gitignore
-echo *.log >> .gitignore
+echo *.log >> .gitignoreECHO is on.
+dataset/ 
+data/ 
+images/ 
+training_data/ 
+*.jpg 
+*.jpeg 
+*.png 
+*.gif 
+*.bmp 
+*.tiff 
+*.webp 
+ECHO is on.
+*.h5 
+*.hdf5 
+*.pkl 
+*.joblib 
+*.pt 
+*.pth 
+*.weights 
+*.pb 
+*.onnx 
